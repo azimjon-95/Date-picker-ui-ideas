@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Календарь</title>
+</head>
+
+<body>
+    <div class="calendar-container">
+        <div class="filter_header">
+            <span>Фильтр</span>
+            <button class="close_button" onclick="closeFilter()">&#10006;</button>
+        </div>
+        <p class="calendar-container_subtitle">Дате</p>
+        <div class="box-po">
+            <p id="btn1" class="btn">YYYY-MM-DD</p>
+            <p>по</p>
+            <p id="btn2" class="btn">YYYY-MM-DD</p>
+        </div>
+
+        <div class="picker">
+            <div class="line-picer"></div>
+            <div class="picker-column" id="year-column">
+                <div class='empty-item'></div>
+                <script>
+                    const currentYear = new Date().getFullYear(); // Hozirgi yilni olish
+                    const startYear = currentYear - 20; // Hozirgi yildan 20 yil oldingi yilni olish
+                    const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => startYear + i);
+                    document.write(years.map(year => `<div class='item ${year === currentYear ? "years" : ""
+                        }' data-value="${year}">${year}</div>`).join(''));
+                </script>
+                <div class='empty-item'></div>
+            </div>
+
+            <div class="picker-column" id="month-column">
+                <div class="empty-item"></div>
+                <script>
+                    const todays = new Date().getMonth() + 1; // Bugungi oy (1-12)
+                    const months = Array.from({ length: 12 }, (_, i) => i + 1);
+                    document.write(
+                        months
+                            .map(
+                                (month) =>
+                                    `<div class='item ${month === todays ? "today" : ""
+                                    }' data-value="${String(month).padStart(2, '0')}">
+                            ${String(month).padStart(2, '0')}
+                        </div>`
+                            )
+                            .join("")
+                    );
+                </script>
+                <div class="empty-item"></div>
+            </div>
+
+            <div class="picker-column" id="day-column">
+                <div class='empty-item'></div>
+                <script>
+                    const days = Array.from({ length: 31 }, (_, i) => i + 1);
+                    const currentDay = new Date().getDate(); // Bugungi kunni aniqlash
+                    document.write(
+                        days
+                            .map((day) => {
+                                const dayStr = String(day).padStart(2, '0');
+                                const isSelected = day === currentDay ? ' selected' : ''; // Tanlangan kun uchun class
+                                return `<div class='item${isSelected}' data-value="${dayStr}">${dayStr}</div>`;
+                            })
+                            .join('')
+                    );
+                </script>
+                <div class='empty-item'></div>
+            </div>
+        </div>
+
+        <p class="calendar-container_subtitle">* Поддерживается до 10 000 записей о сделках. Макс. период поиска:
+            последние 3 месяца для исполненных
+            ордеров и 3 дня для
+            неисполненных ордеров. Для просмотра данных за больший период времени воспользуйтесь функцией
+            «Экспорт»
+            и
+            выберите <br />
+            «Загрузка большого объема данных».
+        </p>
+        <br>
+        <p class="calendar-container_subtitle">Тикер</p>
+        <div class="order-select">
+            <span class="order-select__label">
+                <div>
+                    <span id="order-select__value"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                        <path d="M16.5 8.49v2.25L12 15.51l-4.5-4.77V8.49h9z" fill="currentColor"></path>
+                    </svg>
+                </div>
+            </span>
+            <div class="order-select__list-wrapper">
+                <div class="order-select__list">
+                    <span class="order-select__option" data-value="all">ВСЕ</span>
+                    <span class="order-select__option" data-value="limit-order">Кросс-моржа</span>
+                    <span class="order-select__option" data-value="limit-stop">Изолированная</span>
+                </div>
+            </div>
+        </div>
+        <div class="order-search-box">
+            <button class="reset-selects">Сброс</button>
+            <button class="order-search-button">Поиск</button>
+        </div>
+    </div>
+
+    <script src="./service.js"></script>
+</body>
+
+</html>
