@@ -31,7 +31,14 @@ function smoothScrollTo(column, targetValue) {
         const itemHeight = targetItem.offsetHeight; // Har bir element balandligi
         const offsetTop = targetItem.offsetTop; // Tanlangan element joylashuvi
         const scrollPosition = offsetTop - pickerHeight / 2 + itemHeight / 2; // Markazga tushirish hisoblash
+
+        // Scrollni amalga oshirish
         column.scrollTop = scrollPosition;
+
+        // Vibra qo'shish
+        if (navigator.vibrate) {
+            navigator.vibrate(100); // 100ms davomida tebranish
+        }
     }
 }
 
