@@ -4,6 +4,7 @@ const btn2 = document.getElementById('btn2');
 const dayColumn = document.getElementById('day-column');
 const monthColumn = document.getElementById('month-column');
 const yearColumn = document.getElementById('year-column');
+let activeButton = null;
 
 // Bugungi sana ma'lumotlari
 const today = new Date();
@@ -16,7 +17,24 @@ let selectedDay = todayDay;
 let selectedMonth = todayMonth;
 let selectedYear = todayYear;
 
-let activeButton = null;
+
+// 3 oy orqadagi sana
+const pastDate = new Date();
+pastDate.setMonth(today.getMonth() - 3);
+const pastDay = String(pastDate.getDate()).padStart(2, '0');
+const pastMonth = String(pastDate.getMonth() + 1).padStart(2, '0');
+const pastYear = pastDate.getFullYear();
+
+// Tugmalarni o'zgartirish funksiyasi
+function updateButtonDates() {
+    btn1.textContent = `${pastYear}-${pastMonth}-${pastDay}`; // 3 oy orqadagi sana
+    btn2.textContent = `${todayYear}-${todayMonth}-${todayDay}`; // Bugungi sana
+
+    const selectOldDay = `${pastYear}-${pastMonth}-${pastDay}`;
+    const selectToday = `${todayYear}-${todayMonth} -${todayDay}`;
+    console.log(selectOldDay, selectToday);
+}
+
 
 // Tanlangan sanani yangilash funksiyasi
 function updateSelectedDate() {
@@ -103,7 +121,8 @@ btn1.addEventListener('click', () => setActiveButton(btn1));
 btn2.addEventListener('click', () => setActiveButton(btn2));
 // Sahifa yuklanganda btn1 tugmasini default bosilgan qilib o'rnatish
 window.addEventListener('DOMContentLoaded', () => {
-    setActiveButton(btn1, updateSelectedDate());
+    updateButtonDates()
+    setActiveButton(btn2, updateSelectedDate());
 });
 
 // Bugungi sanani markazga tushirish
