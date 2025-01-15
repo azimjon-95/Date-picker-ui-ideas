@@ -34,11 +34,6 @@ function smoothScrollTo(column, targetValue) {
 
         // Scrollni amalga oshirish
         column.scrollTop = scrollPosition;
-
-        // Vibra qo'shish
-        if (navigator.vibrate) {
-            navigator.vibrate(100); // 100ms davomida tebranish
-        }
     }
 }
 
@@ -58,6 +53,7 @@ function addClickListener(column, type) {
             Array.from(column.children).forEach(item => item.classList.remove('active'));
             event.target.classList.add('active');
         }
+        console.log("ok");
     });
 }
 
@@ -65,6 +61,7 @@ function addClickListener(column, type) {
 function setActiveButton(button) {
     btn1.classList.remove('active');
     btn2.classList.remove('active');
+    console.log("ok");
 
     button.classList.add('active');
     activeButton = button;
@@ -109,7 +106,6 @@ window.addEventListener('DOMContentLoaded', () => {
     setActiveButton(btn1, updateSelectedDate());
 });
 
-
 // Bugungi sanani markazga tushirish
 smoothScrollTo(dayColumn, todayDay);
 smoothScrollTo(monthColumn, todayMonth);
@@ -118,6 +114,7 @@ smoothScrollTo(yearColumn, String(todayYear));
 // "Bugungi oyni markazga tushirish" funksiyasi
 const todayElementMonth = monthColumn.querySelector(`[data-value='${todayMonth}']`);
 if (todayElementMonth) {
+    console.log(todayElementMonth);
     smoothScrollTo(monthColumn, todayMonth);
 }
 

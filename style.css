@@ -20,7 +20,7 @@ body {
     background-color: #1f2630;
     padding: 15px;
     padding-bottom: 80px;
-    max-width: 420px;
+    max-width: 440px;
     height: 92vh;
     border-radius: 15px 15px 0 0;
     position: relative;
@@ -63,7 +63,7 @@ body {
 }
 
 .picker-column {
-    width: 70px;
+    width: 24%;
     position: relative;
     margin: 0 10px;
     overflow-y: scroll;
@@ -142,9 +142,9 @@ body {
 }
 
 .btn {
-    margin: 10px;
+    margin: 10px 0;
     padding: 8px 0px;
-    width: 130px;
+    width: 50%;
     font-size: 1rem;
     color: #fff;
     background: #29313e;
@@ -152,6 +152,7 @@ body {
     border-radius: 10px;
     cursor: pointer;
     border: 1px solid #ffffff00;
+    /* background: red; */
 }
 
 
@@ -159,12 +160,12 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     box-shadow: 0 0 10px #ff440000;
 }
 
 .box-po>p {
-    color: #ffffff97;
+    color: #ffffff6c;
 }
 
 .box-po button {
@@ -174,7 +175,7 @@ body {
 }
 
 .box-po .btn.active {
-    border: 1px solid #ffffff;
+    border: 1px solid #ffffff93;
     color: #fff;
 }
 
@@ -301,4 +302,10 @@ body {
 
 .order-select__label.active svg {
     transform: rotate(180deg);
+}
+
+@media screen and (max-width: 440px) {
+    .calendar-container {
+        width: 100%;
+    }
 }
