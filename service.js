@@ -204,8 +204,10 @@ search_selects.addEventListener('click', () => {
 
 // Serverga ma'lumot yuborish funksiyasi
 function sendDataToServer(value) {
-    console.log('Yuborilayotgan ma\'lumot:', value);
-    // 4454
+    if (window.innerWidth <= 600) {
+        console.log('Yuborilayotgan ma\'lumot:', value);
+        // 4454
+    }
 }
 
 
