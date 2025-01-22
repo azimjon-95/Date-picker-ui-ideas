@@ -4,6 +4,8 @@ const btn2 = document.getElementById('btn2');
 const dayColumn = document.getElementById('day-column');
 const monthColumn = document.getElementById('month-column');
 const yearColumn = document.getElementById('year-column');
+const reset_selects = document.getElementById('reset-selects');
+const search_selects = document.getElementById('search-selects');
 let activeButton = null;
 
 // Bugungi sana ma'lumotlari
@@ -25,14 +27,18 @@ const pastDay = String(pastDate.getDate()).padStart(2, '0');
 const pastMonth = String(pastDate.getMonth() + 1).padStart(2, '0');
 const pastYear = pastDate.getFullYear();
 
+
 // Tugmalarni o'zgartirish funksiyasi
 function updateButtonDates() {
     btn1.textContent = `${pastYear}-${pastMonth}-${pastDay}`; // 3 oy orqadagi sana
     btn2.textContent = `${todayYear}-${todayMonth}-${todayDay}`; // Bugungi sana
 
-    const selectOldDay = `${pastYear}-${pastMonth}-${pastDay}`;
-    const selectToday = `${todayYear}-${todayMonth} -${todayDay}`;
-    console.log(selectOldDay, selectToday);
+    // Dastlabki ma'lumotlarni serverga yuborish
+    const initialData = {
+        old: btn1.textContent.trim(),
+        new: btn2.textContent.trim(),
+    };
+    sendDataToServer(initialData);
 }
 
 
@@ -71,7 +77,6 @@ function addClickListener(column, type) {
             Array.from(column.children).forEach(item => item.classList.remove('active'));
             event.target.classList.add('active');
         }
-        console.log("ok");
     });
 }
 
@@ -79,7 +84,6 @@ function addClickListener(column, type) {
 function setActiveButton(button) {
     btn1.classList.remove('active');
     btn2.classList.remove('active');
-    console.log("ok");
 
     button.classList.add('active');
     activeButton = button;
@@ -155,6 +159,7 @@ document.querySelector('.order-select__label').addEventListener('click', functio
     listWrapper.classList.toggle('active');
     this.classList.toggle('active'); // SVG animatsiyasi uchun
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     const defaultOption = document.querySelector('.order-select__option[data-value="all"]');
     const valueDisplay = document.getElementById('order-select__value');
@@ -170,14 +175,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const options = document.querySelectorAll('.order-select__option');
     options.forEach(option => {
         option.addEventListener('click', function () {
-            const selectedValue = this.dataset.value;
             const selectedText = this.textContent.trim();
 
             // Tanlangan qiymatni ekranga o'rnatish
             valueDisplay.textContent = selectedText;
-
-            // Tanlangan qiymatni serverga yuborish
-            sendDataToServer(selectedValue);
 
             // Modalni yopish
             if (listWrapper.classList.contains('active')) {
@@ -186,21 +187,78 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Serverga ma'lumot yuborish funksiyasi
-    function sendDataToServer(value) {
-        fetch('/your-server-endpoint', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ selectedValue: value }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Serverdan javob:', data);
-            })
-            .catch(error => {
-                console.error('Xatolik yuz berdi:', error);
-            });
-    }
 });
+
+// "Search" tugmasi bosilganda
+search_selects.addEventListener('click', () => {
+    const oldDate = btn1.textContent.trim(); // Eski sana
+    const newDate = btn2.textContent.trim(); // Yangi sana
+
+    const selectedData = {
+        old: oldDate,
+        new: newDate,
+    };
+
+    sendDataToServer(selectedData);
+});
+
+// Serverga ma'lumot yuborish funksiyasi
+function sendDataToServer(value) {
+    console.log('Yuborilayotgan ma\'lumot:', value);
+    // 4454
+}
+
+
+// Reset qilish funksiyasi
+function resetToDefault() {
+    selectedDay = todayDay;
+    selectedMonth = todayMonth;
+    selectedYear = todayYear;
+
+    // Default qiymatlarni markazga skroll qilish
+    smoothScrollTo(dayColumn, selectedDay);
+    smoothScrollTo(monthColumn, selectedMonth);
+    smoothScrollTo(yearColumn, String(selectedYear));
+
+    btn1.textContent = `${pastYear}-${pastMonth}-${pastDay}`; // 3 oy orqadagi sana
+    btn2.textContent = `${todayYear}-${todayMonth}-${todayDay}`; // Bugungi sana
+    const initialData = {
+        old: btn1.textContent.trim(),
+        new: btn2.textContent.trim(),
+    };
+    sendDataToServer(initialData);
+    // Sahifa yuklanganda btn1 tugmasini default bosilgan qilib o'rnatish
+    window.addEventListener('DOMContentLoaded', () => {
+        updateButtonDates()
+        setActiveButton(btn2, updateSelectedDate());
+    });
+}
+
+// Reset qilish funksiyasi
+function resetToDefault() {
+    // Tanlangan sanani bugungi sana bilan tiklash
+    selectedDay = todayDay;
+    selectedMonth = todayMonth;
+    selectedYear = todayYear;
+
+    // Default qiymatlarni markazga skroll qilish
+    smoothScrollTo(dayColumn, selectedDay);
+    smoothScrollTo(monthColumn, selectedMonth);
+    smoothScrollTo(yearColumn, String(selectedYear));
+
+    // Tugmalar matnini yangilash
+    btn1.textContent = `${pastYear}-${pastMonth}-${pastDay}`;
+    btn2.textContent = `${todayYear}-${todayMonth}-${todayDay}`;
+
+    // Dastlabki ma'lumotlarni serverga yuborish
+    sendDataToServer({
+        old: btn1.textContent.trim(),
+        new: btn2.textContent.trim(),
+    });
+
+    // Faol tugmani o'rnatish
+    setActiveButton(btn2);
+}
+
+// "Reset" tugmasi bosilganda
+reset_selects.addEventListener('click', resetToDefault);
